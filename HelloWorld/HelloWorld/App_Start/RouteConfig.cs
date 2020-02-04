@@ -28,11 +28,11 @@ namespace HelloWorld
                 defaults: new { controller = "Home", action = "GoToHome", id = UrlParameter.Optional }
             );
 
-            routes.MapRoute(
-               name: "Home2",
-               url: "",
-               defaults: new { controller = "Home", action = "GoToHome", id = UrlParameter.Optional }
-           );
+           // routes.MapRoute(
+           //    name: "Home2",
+           //    url: "",
+           //    defaults: new { controller = "Home", action = "GoToHome", id = UrlParameter.Optional }
+           //);
 
             routes.MapRoute(
                 name: "Default",
