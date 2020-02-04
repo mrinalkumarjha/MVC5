@@ -144,6 +144,79 @@ Action(AddCustomer)  ===> Controller ===> costomerModel
 		 
 		 Session["MyTimeSession"] = DateTime.Now.ToString();
 		 
-		 this data will be maintained in every request.
+		 this data will be maintained in every request. session data will be maintained untill you close browser.
 		 
+		 
+# Models in mvc
+		Models are classes which have business logic and provide data. for ex customer class, supplier class.
 		
+		example:
+			public class Customer
+		{
+			public string CustomerCode { get; set; }
+			public string CustomerName { get; set; }
+		}
+		
+# RAZOR 
+		RAZOR is view engine to create view.
+		
+
+# Controller
+		controller takes request select model and return to view. 
+		
+		Request.Form["CustomerCode"] this way we are getting form value in mvc
+		
+		 public ActionResult Submit()
+        {
+            Customer customer = new Customer()
+            {
+                CustomerCode = Request.Form["CustomerCode"],
+                CustomerName = Request.Form["CustomerName"]
+            };
+            return View("Customer", customer);
+        }
+		
+		// second way to pass as parameter data will be filled auto if name same in input tag and model property.
+		public ActionResult Submit(Customer customer)
+        {
+            return View("Customer", customer);
+        }
+		
+		
+ But what if property name dont match with html input name ?
+		We use model binder to handle this situation
+
+# ModelBinder
+		Suppose there are situation where html input name attribute and mvc model class property name does not match. then auto binding wont happen after posting form.
+		So to handle this situation we will use ModelBinder.
+		ModelBinder has code which will connect ui with model.
+		To create model binder you need to implement IModelBinder interface.
+		
+		Example Customer binder:
+    	 public class CustomerBinder : IModelBinder
+		{
+			public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
+			{
+				HttpContextBase httpContext = controllerContext.HttpContext;
+				string CustCode = httpContext.Request.Form["txtCustomerCode"];
+				string CustName = httpContext.Request.Form["txtCustomerName"];
+
+				Customer customer = new Customer()
+				{
+					CustomerCode = CustCode,
+					CustomerName = CustName
+				};
+
+				return customer;
+			}
+		}
+	
+		
+		// call it in action method
+		public ActionResult Submit([ModelBinder(typeof(CustomerBinder))] Customer customer)
+        {
+            return View("Customer", customer);
+        }
+		
+		 
+# Why MVC and MVC vs WebForm ?
